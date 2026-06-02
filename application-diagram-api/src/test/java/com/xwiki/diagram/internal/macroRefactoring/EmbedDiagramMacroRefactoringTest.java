@@ -74,14 +74,14 @@ void testReplaceReferenceUpdateWithSuccess() throws Exception
 
     EntityReference attachmentReference = mock(EntityReference.class);
 
-    when(macroBlock.getParameter(SOURCE_DOCUMENT)).thenReturn("test");
-    when(resolver.resolve("test", EntityType.ATTACHMENT)).thenReturn(attachmentReference);
+    when(macroBlock.getParameter(SOURCE_DOCUMENT)).thenReturn("test.diagram.xml");
+    when(resolver.resolve("test.diagram.xml", EntityType.ATTACHMENT)).thenReturn(attachmentReference);
 
     when(attachmentReference.getParent()).thenReturn(sourceReference);
-    when(attachmentReference.getName()).thenReturn("file.png");
+    when(attachmentReference.getName()).thenReturn("file.diagram.xml");
 
     ArgumentCaptor<AttachmentReference> captor = ArgumentCaptor.forClass(AttachmentReference.class);
-    when(serializer.serialize(captor.capture())).thenReturn("Space.TargetPage@file.png");
+    when(serializer.serialize(captor.capture())).thenReturn("Space.TargetPage@file.diagram.xml");
 
     Optional<MacroBlock> optional =
         refactoring.replaceReference(macroBlock, currentDocumentReference, sourceReference, targetReference, false);
@@ -89,10 +89,10 @@ void testReplaceReferenceUpdateWithSuccess() throws Exception
     assertTrue(optional.isPresent());
 
     AttachmentReference captured = captor.getValue();
-    assertEquals("file.png", captured.getName());
+    assertEquals("file.diagram.xml", captured.getName());
     assertEquals(targetReference, captured.getParent());
 
-    verify(macroBlock).setParameter(SOURCE_DOCUMENT, "Space.TargetPage@file.png");
+    verify(macroBlock).setParameter(SOURCE_DOCUMENT, "Space.TargetPage@file.diagram.xml");
 }
 
     @Test

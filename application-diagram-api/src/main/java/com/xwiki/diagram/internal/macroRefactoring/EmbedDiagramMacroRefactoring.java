@@ -58,7 +58,6 @@ public class EmbedDiagramMacroRefactoring extends AbstractInlineDiagramMacroRefa
     @Named("current")
     private EntityReferenceResolver<String> resolver;
 
-
     @Override
     public Optional<MacroBlock> replaceReference(MacroBlock macroBlock, DocumentReference currentDocumentReference,
         DocumentReference sourceReference, DocumentReference targetReference, boolean relative)
@@ -68,14 +67,12 @@ public class EmbedDiagramMacroRefactoring extends AbstractInlineDiagramMacroRefa
         if (serializedReference == null) {
             return Optional.empty();
         }
-        EntityReference attachmentReference = resolver.resolve(serializedReference, EntityType.ATTACHMENT);
-        if (attachmentReference != null && attachmentReference.getParent().equals(sourceReference)) {
-            EntityReference newAttachmentReference =
-                new AttachmentReference(attachmentReference.getName(), targetReference);
-            macroBlock.setParameter(SOURCE_DOCUMENT, serializer.serialize(newAttachmentReference));
-            return Optional.of(macroBlock);
+
+        if (serializedReference.endsWith(".diagram.xml")) {
+            return handleInlineDiagramMoved(serializedReference, sourceReference, targetReference, macroBlock);
+        } else {
+            return replaceSerializedReference(serializedReference, macroBlock, sourceReference, targetReference);
         }
-        return Optional.empty();
     }
 
     @Override
@@ -87,6 +84,26 @@ public class EmbedDiagramMacroRefactoring extends AbstractInlineDiagramMacroRefa
         if (serializedReference == null) {
             return Optional.empty();
         }
+        return replaceSerializedReference(serializedReference, macroBlock, sourceReference, targetReference);
+    }
+
+    private Optional<MacroBlock> handleInlineDiagramMoved(String serializedReference, DocumentReference sourceReference,
+        DocumentReference targetReference, MacroBlock macroBlock)
+    {
+        EntityReference attachmentReference = resolver.resolve(serializedReference, EntityType.ATTACHMENT);
+        if (attachmentReference != null && attachmentReference.getParent().equals(sourceReference)) {
+            EntityReference newAttachmentReference =
+                new AttachmentReference(attachmentReference.getName(), targetReference);
+            macroBlock.setParameter(SOURCE_DOCUMENT, serializer.serialize(newAttachmentReference));
+            return Optional.of(macroBlock);
+        }
+        return Optional.empty();
+    }
+
+    private Optional<MacroBlock> replaceSerializedReference(String serializedReference, MacroBlock macroBlock,
+        EntityReference sourceReference, EntityReference targetReference)
+    {
+
         if (serializedReference.equals(serializer.serialize(sourceReference))) {
             macroBlock.setParameter(SOURCE_DOCUMENT, serializer.serialize(targetReference));
             return Optional.of(macroBlock);
