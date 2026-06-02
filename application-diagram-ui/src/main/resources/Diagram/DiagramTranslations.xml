@@ -84,7 +84,7 @@ rendering.macro.inlineDiagram.description=Create and show an inline diagram. The
 rendering.macro.inlineDiagram.parameter.diagramName.name=Diagram Name
 rendering.macro.inlineDiagram.parameter.diagramName.description=The name of the diagram. It is also used for the attachment name.
 diagram.inline.macro.editMode=The diagram content cannot be edited in page edit mode. Please switch back to view for this action.
-diagram.inline.macro.createNew=Create a new inline diagram.
+diagram.inline.macro.createNew=Create a new inline diagram
 
 # Embed Inline Diagram
 rendering.macro.embedDiagram.name=Embed Diagram
