@@ -24,14 +24,20 @@ import java.util.Optional;
 import javax.inject.Named;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.xwiki.model.EntityType;
+import org.xwiki.model.reference.AttachmentReference;
 import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.EntityReference;
+import org.xwiki.model.reference.EntityReferenceResolver;
 import org.xwiki.model.reference.EntityReferenceSerializer;
 import org.xwiki.rendering.block.MacroBlock;
 import org.xwiki.test.junit5.mockito.ComponentTest;
 import org.xwiki.test.junit5.mockito.InjectMockComponents;
 import org.xwiki.test.junit5.mockito.MockComponent;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -55,21 +61,39 @@ public class EmbedDiagramMacroRefactoringTest
     @Named("compact")
     private EntityReferenceSerializer<String> serializer;
 
-    @Test
-    void testReplaceReferenceUpdateWithSuccess() throws Exception
-    {
-        DocumentReference documentReference = mock(DocumentReference.class);
-        DocumentReference target = mock(DocumentReference.class);
-        when(macroBlock.getParameter(SOURCE_DOCUMENT)).thenReturn("test");
-        when(serializer.serialize(documentReference)).thenReturn("test");
+    @MockComponent
+    @Named("current")
+    private EntityReferenceResolver<String> resolver;
 
-        Optional<MacroBlock> optional =
-            refactoring.replaceReference(macroBlock, documentReference, documentReference, target, false);
-        assertTrue(optional.isPresent());
-        verify(serializer).serialize(documentReference);
-        verify(serializer).serialize(target);
+ @Test
+void testReplaceReferenceUpdateWithSuccess() throws Exception
+{
+    DocumentReference currentDocumentReference = mock(DocumentReference.class);
+    DocumentReference sourceReference = mock(DocumentReference.class);
+    DocumentReference targetReference = mock(DocumentReference.class);
 
-    }
+    EntityReference attachmentReference = mock(EntityReference.class);
+
+    when(macroBlock.getParameter(SOURCE_DOCUMENT)).thenReturn("test");
+    when(resolver.resolve("test", EntityType.ATTACHMENT)).thenReturn(attachmentReference);
+
+    when(attachmentReference.getParent()).thenReturn(sourceReference);
+    when(attachmentReference.getName()).thenReturn("file.png");
+
+    ArgumentCaptor<AttachmentReference> captor = ArgumentCaptor.forClass(AttachmentReference.class);
+    when(serializer.serialize(captor.capture())).thenReturn("Space.TargetPage@file.png");
+
+    Optional<MacroBlock> optional =
+        refactoring.replaceReference(macroBlock, currentDocumentReference, sourceReference, targetReference, false);
+
+    assertTrue(optional.isPresent());
+
+    AttachmentReference captured = captor.getValue();
+    assertEquals("file.png", captured.getName());
+    assertEquals(targetReference, captured.getParent());
+
+    verify(macroBlock).setParameter(SOURCE_DOCUMENT, "Space.TargetPage@file.png");
+}
 
     @Test
     void testReplaceReferenceUpdateWithoutSuccess() throws Exception

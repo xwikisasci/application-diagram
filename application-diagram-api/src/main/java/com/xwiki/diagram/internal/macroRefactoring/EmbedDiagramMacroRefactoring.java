@@ -26,9 +26,11 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
+import org.xwiki.model.EntityType;
 import org.xwiki.model.reference.AttachmentReference;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
+import org.xwiki.model.reference.EntityReferenceResolver;
 import org.xwiki.model.reference.EntityReferenceSerializer;
 import org.xwiki.rendering.block.MacroBlock;
 import org.xwiki.rendering.macro.MacroRefactoringException;
@@ -52,24 +54,34 @@ public class EmbedDiagramMacroRefactoring extends AbstractInlineDiagramMacroRefa
     @Named("compact")
     private EntityReferenceSerializer<String> serializer;
 
+    @Inject
+    @Named("current")
+    private EntityReferenceResolver<String> resolver;
+
+
     @Override
     public Optional<MacroBlock> replaceReference(MacroBlock macroBlock, DocumentReference currentDocumentReference,
         DocumentReference sourceReference, DocumentReference targetReference, boolean relative)
         throws MacroRefactoringException
     {
-        return replaceSerializedReference(macroBlock, sourceReference, targetReference);
+        String serializedReference = macroBlock.getParameter(SOURCE_DOCUMENT);
+        if (serializedReference == null) {
+            return Optional.empty();
+        }
+        EntityReference attachmentReference = resolver.resolve(serializedReference, EntityType.ATTACHMENT);
+        if (attachmentReference != null && attachmentReference.getParent().equals(sourceReference)) {
+            EntityReference newAttachmentReference =
+                new AttachmentReference(attachmentReference.getName(), targetReference);
+            macroBlock.setParameter(SOURCE_DOCUMENT, serializer.serialize(newAttachmentReference));
+            return Optional.of(macroBlock);
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<MacroBlock> replaceReference(MacroBlock macroBlock, DocumentReference currentDocumentReference,
         AttachmentReference sourceReference, AttachmentReference targetReference, boolean relative)
         throws MacroRefactoringException
-    {
-        return replaceSerializedReference(macroBlock, sourceReference, targetReference);
-    }
-
-    private Optional<MacroBlock> replaceSerializedReference(MacroBlock macroBlock, EntityReference sourceReference,
-        EntityReference targetReference)
     {
         String serializedReference = macroBlock.getParameter(SOURCE_DOCUMENT);
         if (serializedReference == null) {
