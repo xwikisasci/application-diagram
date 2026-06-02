@@ -78,11 +78,52 @@ diagram.macro.invalidReference=La page spécifiée n'est pas un diagramme.
 diagram.macro.view=Voir le diagramme
 diagram.macro.viewNotAllowed=Vous n'êtes pas autorisé(e) à voir ce diagramme.
 
+# Inline Diagram Macro
+### Missing: rendering.macro.inlineDiagram.name=Inline Diagram
+### Missing: rendering.macro.inlineDiagram.description=Create and show an inline diagram. The diagram will be stored as an attachment on this page. Include it in other pages by using the Embed Diagram Macro.
+### Missing: rendering.macro.inlineDiagram.parameter.diagramName.name=Diagram Name
+### Missing: rendering.macro.inlineDiagram.parameter.diagramName.description=The name of the diagram. It is also used for the attachment name.
+### Missing: diagram.inline.macro.editMode=The diagram content cannot be edited in page edit mode. Please switch back to view for this action.
+### Missing: diagram.inline.macro.createNew=Create a new inline diagram.
+
+# Embed Inline Diagram
+### Missing: rendering.macro.embedDiagram.name=Embed Diagram
+### Missing: rendering.macro.embedDiagram.description=Embed an inline diagram in the current page.
+### Missing: rendering.macro.embedDiagram.parameter.diagramSource.name=Diagram Source
+### Missing: rendering.macro.embedDiagram.parameter.diagramSource.description=The reference of the document that stores the original diagram.
+### Missing: rendering.macro.embedDiagram.parameter.externalDiagramSource.name=External Diagram Source
+### Missing: rendering.macro.embedDiagram.parameter.externalDiagramSource.description=An external link to a diagram source.
+### Missing: rendering.macro.embedDiagram.parameter.enableEdit.name=Enable Edit
+### Missing: rendering.macro.embedDiagram.parameter.enableEdit.description=Enables editing of the embedded diagram. If external sources are used, this parameter is ignored.
+### Missing: diagram.inline.macro.diagramDoesntExist=The diagram that you want to embed doesn't exist. Please check the parameters.
+### Missing: diagram.embedDiagram.macro.editMode=Use the WYSIWYG edit mode only for updating the parameters. To edit the diagram use the button from the diagram toolbar to get redirect to the source diagram.
+### Missing: diagram.inline.macro.noSourceSet=You must select a source for the macro to work.
+### Missing: diagram.inline.macro.bothSourcesSet=You must select only one source for the macro to work.
+### Missing: diagram.inline.macro.externalDiagramInEditMode=You can not edit external diagram in XWiki. Please edit the source and the change should be reflected in XWiki.
+# Inline editor
+### Missing: diagram.inlineDiagram.editor.save.button=Save
+### Missing: diagram.inlineDiagram.editor.return.button=Back to page
+### Missing: diagram.inlineDiagram.editor.return.title=Return to the original document.
+
 # Diagram editor
 diagram.editor.saveAsImageAttachmentError=Erreur lors de la sauvegarde du diagramme sous forme de pièce jointe.
 diagram.editor.disabledExternalServices=Les services externes sont désactivés.
 diagram.editor.menu.print.title=Imprimer le diagramme en utilisant un service externe lorsque possible, sinon exporter simplement et le sauvegarder comme PDF.
 diagram.editor.menu.print.label=Imprimer / Exporter en PDF
+### Missing: diagram.editor.menu.goBack.label=Go Back
+### Missing: diagram.editor.menu.goBack.title=Return to the original document.
+### Missing: diagram.editor.menu.save.label=Save
+### Missing: diagram.editor.menu.save.title=Save the diagram.
+### Missing: diagram.editor.menu.notification.save=Saving diagram…
+### Missing: diagram.editor.menu.notification.created=Diagram created.
+### Missing: diagram.editor.menu.notification.updated=Diagram updated.
+### Missing: diagram.editor.menu.notification.error=Something went wrong while trying to save the diagram.
+
+# Link modal
+### Missing: diagram.link.modal.link=Link
+
+# Link modal
+### Missing: diagram.link.modal.link=Link
 
 # Diagram Configuration
 Diagram.DiagramConfigClass_exportURL=URL d'export
