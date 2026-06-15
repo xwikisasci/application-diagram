@@ -54,7 +54,7 @@ diagram.livetable.doc.location=Emplacement
 diagram.livetable.emptyvalue=-
 
 # Diagram Macro
-rendering.macro.diagram.description=Affiche un diagramme.
+rendering.macro.diagram.description=Affiche un diagramme. Cette macro sera dépréciée le 01/06/2027, merci d'utiliser la macro Inline Diagram ou la macro Embed Diagram à la place.
 rendering.macro.diagram.name=Diagramme
 rendering.macro.diagram.parameter.cached.description=Afficher le diagramme sous la forme d'une image mise en cache (plus rapide) plutôt que d'un dessin vectoriel (plus lent). Pas appliqué si un lien vers un diagramme externe est utilisé.
 rendering.macro.diagram.parameter.cached.name=Mise en cache
@@ -79,23 +79,23 @@ diagram.macro.view=Voir le diagramme
 diagram.macro.viewNotAllowed=Vous n'êtes pas autorisé(e) à voir ce diagramme.
 
 # Inline Diagram Macro
-### Missing: rendering.macro.inlineDiagram.name=Inline Diagram
-### Missing: rendering.macro.inlineDiagram.description=Create and show an inline diagram. The diagram will be stored as an attachment on this page. Include it in other pages by using the Embed Diagram Macro.
-### Missing: rendering.macro.inlineDiagram.parameter.diagramName.name=Diagram Name
-### Missing: rendering.macro.inlineDiagram.parameter.diagramName.description=The name of the diagram. It is also used for the attachment name.
-### Missing: diagram.inline.macro.editMode=The diagram content cannot be edited in page edit mode. Please switch back to view for this action.
-### Missing: diagram.inline.macro.createNew=Create a new inline diagram.
+rendering.macro.inlineDiagram.name=Inline Diagram
+rendering.macro.inlineDiagram.description=Créer et afficher un diagramme en ligne. Le diagramme sera stocké comme pièce jointe dans cette page. Embarquez-le dans une autre page en utilisant la macro Embed Diagram.
+rendering.macro.inlineDiagram.parameter.diagramName.name=Nom du diagramme
+rendering.macro.inlineDiagram.parameter.diagramName.description=Le nom du diagramme. Il est aussi utilisé pour le nom de la pièce-jointe.
+diagram.inline.macro.editMode=Le contenu du diagramme ne peut pas être édité en mode édition. Merci de retourner en mode lecture pour cette action.
+diagram.inline.macro.createNew=Créer un nouveau diagramme en ligne
 
 # Embed Inline Diagram
-### Missing: rendering.macro.embedDiagram.name=Embed Diagram
-### Missing: rendering.macro.embedDiagram.description=Embed an inline diagram in the current page.
-### Missing: rendering.macro.embedDiagram.parameter.diagramSource.name=Diagram Source
-### Missing: rendering.macro.embedDiagram.parameter.diagramSource.description=The reference of the document that stores the original diagram.
-### Missing: rendering.macro.embedDiagram.parameter.externalDiagramSource.name=External Diagram Source
-### Missing: rendering.macro.embedDiagram.parameter.externalDiagramSource.description=An external link to a diagram source.
-### Missing: rendering.macro.embedDiagram.parameter.enableEdit.name=Enable Edit
-### Missing: rendering.macro.embedDiagram.parameter.enableEdit.description=Enables editing of the embedded diagram. If external sources are used, this parameter is ignored.
-### Missing: diagram.inline.macro.diagramDoesntExist=The diagram that you want to embed doesn't exist. Please check the parameters.
+rendering.macro.embedDiagram.name=Embed Diagram
+rendering.macro.embedDiagram.description=Embarquer un diagramme en ligne dans la page courante.
+rendering.macro.embedDiagram.parameter.diagramSource.name=Source du diagramme
+rendering.macro.embedDiagram.parameter.diagramSource.description=La référence du document qui stocke le diagramme original.
+rendering.macro.embedDiagram.parameter.externalDiagramSource.name=Source externe du diagramme
+rendering.macro.embedDiagram.parameter.externalDiagramSource.description=Un lien externe vers un fournisseur de diagramme.
+rendering.macro.embedDiagram.parameter.enableEdit.name=Autoriser l'édition
+rendering.macro.embedDiagram.parameter.enableEdit.description=Autorise l'édition du diagramme embarqué. Si une source externe est utilisée, ce paramètre est ignoré.
+diagram.inline.macro.diagramDoesntExist=Le diagramme que vous voulez embarquer n'existe pas. Merci de vérifier les paramètres.
 ### Missing: diagram.embedDiagram.macro.editMode=Use the WYSIWYG edit mode only for updating the parameters. To edit the diagram use the button from the diagram toolbar to get redirect to the source diagram.
 ### Missing: diagram.inline.macro.noSourceSet=You must select a source for the macro to work.
 ### Missing: diagram.inline.macro.bothSourcesSet=You must select only one source for the macro to work.
