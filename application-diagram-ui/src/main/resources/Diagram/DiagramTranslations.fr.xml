@@ -96,8 +96,8 @@ rendering.macro.embedDiagram.parameter.externalDiagramSource.description=Un lien
 rendering.macro.embedDiagram.parameter.enableEdit.name=Autoriser l'édition
 rendering.macro.embedDiagram.parameter.enableEdit.description=Autorise l'édition du diagramme embarqué. Si une source externe est utilisée, ce paramètre est ignoré.
 diagram.inline.macro.diagramDoesntExist=Le diagramme que vous voulez embarquer n'existe pas. Merci de vérifier les paramètres.
-### Missing: diagram.embedDiagram.macro.editMode=Use the WYSIWYG edit mode only for updating the parameters. To edit the diagram use the button from the diagram toolbar to get redirect to the source diagram.
-### Missing: diagram.inline.macro.noSourceSet=You must select a source for the macro to work.
+diagram.embedDiagram.macro.editMode=Utiliser le mode d'édition WYSIWYG uniquement pour mettre à jour les paramètres. Pour éditer le diagramme, utiliser le bouton de la barre d'outils diagramme pour être redirigé vers le diagramme source.
+diagram.inline.macro.noSourceSet=Vous devez sélectionner une source pour que la macro fonctionne.
 ### Missing: diagram.inline.macro.bothSourcesSet=You must select only one source for the macro to work.
 ### Missing: diagram.inline.macro.externalDiagramInEditMode=You can not edit external diagram in XWiki. Please edit the source and the change should be reflected in XWiki.
 # Inline editor
