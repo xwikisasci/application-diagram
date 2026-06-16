@@ -98,32 +98,32 @@ rendering.macro.embedDiagram.parameter.enableEdit.description=Autorise l'éditio
 diagram.inline.macro.diagramDoesntExist=Le diagramme que vous voulez embarquer n'existe pas. Merci de vérifier les paramètres.
 diagram.embedDiagram.macro.editMode=Utiliser le mode d'édition WYSIWYG uniquement pour mettre à jour les paramètres. Pour éditer le diagramme, utiliser le bouton de la barre d'outils diagramme pour être redirigé vers le diagramme source.
 diagram.inline.macro.noSourceSet=Vous devez sélectionner une source pour que la macro fonctionne.
-### Missing: diagram.inline.macro.bothSourcesSet=You must select only one source for the macro to work.
-### Missing: diagram.inline.macro.externalDiagramInEditMode=You can not edit external diagram in XWiki. Please edit the source and the change should be reflected in XWiki.
+diagram.inline.macro.bothSourcesSet=Vous devez sélectionner une source uniquement pour que la macro fonctionne.
+diagram.inline.macro.externalDiagramInEditMode=Vous ne pouvez pas éditer un diagramme externe dans XWiki. Merci d'éditer la source, et les changements devraient être reflétés dans XWiki.
 # Inline editor
-### Missing: diagram.inlineDiagram.editor.save.button=Save
-### Missing: diagram.inlineDiagram.editor.return.button=Back to page
-### Missing: diagram.inlineDiagram.editor.return.title=Return to the original document.
+diagram.inlineDiagram.editor.save.button=Sauvegarder
+diagram.inlineDiagram.editor.return.button=Retour à la page
+diagram.inlineDiagram.editor.return.title=Retour au document général.
 
 # Diagram editor
 diagram.editor.saveAsImageAttachmentError=Erreur lors de la sauvegarde du diagramme sous forme de pièce jointe.
 diagram.editor.disabledExternalServices=Les services externes sont désactivés.
 diagram.editor.menu.print.title=Imprimer le diagramme en utilisant un service externe lorsque possible, sinon exporter simplement et le sauvegarder comme PDF.
 diagram.editor.menu.print.label=Imprimer / Exporter en PDF
-### Missing: diagram.editor.menu.goBack.label=Go Back
-### Missing: diagram.editor.menu.goBack.title=Return to the original document.
-### Missing: diagram.editor.menu.save.label=Save
-### Missing: diagram.editor.menu.save.title=Save the diagram.
-### Missing: diagram.editor.menu.notification.save=Saving diagram…
-### Missing: diagram.editor.menu.notification.created=Diagram created.
-### Missing: diagram.editor.menu.notification.updated=Diagram updated.
-### Missing: diagram.editor.menu.notification.error=Something went wrong while trying to save the diagram.
+diagram.editor.menu.goBack.label=Revenir en arrière
+diagram.editor.menu.goBack.title=Revenir au document original.
+diagram.editor.menu.save.label=Sauvegarder
+diagram.editor.menu.save.title=Sauvegarder le diagramme.
+diagram.editor.menu.notification.save=Sauvegarde du diagramme en cours…
+diagram.editor.menu.notification.created=Diagramme créé.
+diagram.editor.menu.notification.updated=Diagramme mis à jour.
+diagram.editor.menu.notification.error=Quelque chose s'est mal passé lors de la tentative de sauvegarde du diagramme.
 
 # Link modal
-### Missing: diagram.link.modal.link=Link
+diagram.link.modal.link=Lien
 
 # Link modal
-### Missing: diagram.link.modal.link=Link
+diagram.link.modal.link=Lien
 
 # Diagram Configuration
 Diagram.DiagramConfigClass_exportURL=URL d'export
