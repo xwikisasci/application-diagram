@@ -20,6 +20,7 @@
 package com.xwiki.diagram.internal;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -30,12 +31,13 @@ import org.xwiki.component.annotation.Component;
 import org.xwiki.model.reference.DocumentReference;
 
 import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.doc.XWikiAttachment;
 import com.xpn.xwiki.doc.XWikiDocument;
 import com.xwiki.diagram.internal.handlers.DiagramContentHandler;
 
 /**
  * Updates content and attachment of a diagram after the rename of backlinked pages.
- * 
+ *
  * @version $Id$
  * @since 1.13
  */
@@ -52,6 +54,9 @@ public class DiagramLinksRunnable extends AbstractDiagramRunnable
     @Inject
     private Provider<XWikiContext> contextProvider;
 
+    @Inject
+    private DiagramRenameStateManager renameStateManager;
+
     /**
      * @see com.xpn.xwiki.util.AbstractXWikiRunnable#runInternal()
      */
@@ -64,29 +69,58 @@ public class DiagramLinksRunnable extends AbstractDiagramRunnable
             if (queueEntry == STOP_RUNNABLE_ENTRY) {
                 break;
             }
-
-            XWikiContext context = contextProvider.get();
-            DocumentReference originalDocRef = queueEntry.originalDocRef;
-            DocumentReference currentDocRef = queueEntry.currentDocRef;
-
+            logger.info("Processing queue entry: {}", queueEntry);
             try {
-                // We need to take backlinks from the original document because at this step they are not loaded on
-                // the new document.
-                List<DocumentReference> backlinks =
-                    context.getWiki().getDocument(originalDocRef, context).getBackLinkedReferences(context);
+                processEntry(queueEntry);
+            } finally {
+                // Always decrement so the map is never kept alive by a stuck counter, and trigger cleanup in case
+                // the job already finished.
+                renameStateManager.decrementAndCleanup(queueEntry);
+            }
+        }
+    }
 
-                XWikiDocument backlinkDoc;
-                for (DocumentReference backlinkRef : backlinks) {
-                    backlinkDoc = context.getWiki().getDocument(backlinkRef, context).clone();
+    private void processEntry(DiagramQueueEntry queueEntry)
+    {
 
-                    if (backlinkDoc.getXObject(DiagramContentHandler.DIAGRAM_CLASS) != null) {
-                        contentHandler.updateDiagramContent(backlinkDoc, originalDocRef, currentDocRef, context);
+        XWikiContext context = contextProvider.get();
+        DocumentReference originalDocRef = queueEntry.originalDocRef;
+        DocumentReference currentDocRef = queueEntry.currentDocRef;
+        List<DocumentReference> backlinks = queueEntry.backlinks;
+        for (DocumentReference backlinkRef : backlinks) {
+            logger.info("Handling backlink [{}]", backlinkRef);
+            try {
+                // If this backlink was also part of the same rename job, it may have already been moved. Resolve it to
+                // its new location, falling back to the original reference if it was not part of the job yet.
+                DocumentReference resolvedRef = queueEntry.renameMap.getOrDefault(backlinkRef, backlinkRef);
 
-                        contentHandler.updateAttachment(backlinkDoc, originalDocRef, currentDocRef);
-                    }
+                if (!resolvedRef.equals(backlinkRef)) {
+                    logger.info("Backlink [{}] was also renamed, resolving to [{}]", backlinkRef, resolvedRef);
+                }
+
+                XWikiDocument backlinkDoc = context.getWiki().getDocument(resolvedRef, context).clone();
+
+                if (backlinkDoc.isNew()) {
+                    logger.warn("Could not load backlink document [{}], skipping", resolvedRef);
+                    continue;
+                }
+
+                if (backlinkDoc.getXObject(DiagramContentHandler.DIAGRAM_CLASS) != null) {
+                    logger.info("The backlink was a standalone diagram.");
+                    contentHandler.updateDiagramContent(backlinkDoc, originalDocRef, currentDocRef, context);
+                    contentHandler.updateAttachment(backlinkDoc, originalDocRef, currentDocRef);
+                }
+
+                List<XWikiAttachment> attachments = backlinkDoc.getAttachmentList().stream()
+                    .filter(attachment -> attachment.getFilename().endsWith("diagram" + ".xml"))
+                    .collect(Collectors.toList());
+                if (!attachments.isEmpty()) {
+                    logger.info("The backlink was an inline diagram.");
+                    contentHandler.updateDiagramContent(attachments, backlinkDoc, originalDocRef, currentDocRef,
+                        context);
                 }
             } catch (Exception e) {
-                logger.warn("Update diagram backlinks thread interrupted", e);
+                logger.warn("Error processing diagram links for entry [{}]", queueEntry, e);
             }
         }
     }

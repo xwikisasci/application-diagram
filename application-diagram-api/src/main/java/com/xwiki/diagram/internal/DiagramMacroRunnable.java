@@ -66,6 +66,9 @@ public class DiagramMacroRunnable extends AbstractDiagramRunnable
     @Inject
     private Logger logger;
 
+    @Inject
+    private DiagramRenameStateManager renameStateManager;
+
     /**
      * @see com.xpn.xwiki.util.AbstractXWikiRunnable#runInternal()
      */
@@ -86,8 +89,7 @@ public class DiagramMacroRunnable extends AbstractDiagramRunnable
             try {
                 // We need to take backlinks from the original document because at this step they are not loaded on
                 // the new document.
-                List<DocumentReference> backlinks =
-                    xcontext.getWiki().getDocument(originalDocRef, xcontext).getBackLinkedReferences(xcontext);
+                List<DocumentReference> backlinks = queueEntry.backlinks;
 
                 for (DocumentReference backlinkDocRef : backlinks) {
                     XWikiDocument backlinkDoc = xcontext.getWiki().getDocument(backlinkDocRef, xcontext).clone();
@@ -96,6 +98,10 @@ public class DiagramMacroRunnable extends AbstractDiagramRunnable
                 }
             } catch (XWikiException e) {
                 logger.warn("Update diagram macro reference parameter thread interrupted", e);
+            } finally {
+                // Always decrement so the map is never kept alive by a stuck counter, and trigger cleanup in case
+                // the job already finished.
+                renameStateManager.decrementAndCleanup(queueEntry);
             }
         }
     }

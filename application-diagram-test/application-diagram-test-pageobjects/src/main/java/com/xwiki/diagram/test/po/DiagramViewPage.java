@@ -17,31 +17,10 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package com.xwiki.diagram.test.ui;
+package com.xwiki.diagram.test.po;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.xwiki.test.docker.junit5.UITest;
+import org.xwiki.test.ui.po.ViewPage;
 
-
-/**
- * All UI tests for the Diagram Macro.
- *
- * @version $Id$
- * @since 1.22.8
- */
-@UITest
-public class AllIT
+public class DiagramViewPage extends ViewPage
 {
-    @Nested
-    @DisplayName("Diagram Tests")
-    class NestedConfluenceMigratorIT extends DiagramIT
-    {
-    }
-
-    @Nested
-    @DisplayName("Diagram backlinks")
-    class NestedBacklinksIT extends BacklinksIT
-    {
-    }
 }

@@ -39,7 +39,7 @@ public abstract class AbstractDiagramRunnable extends AbstractXWikiRunnable
     /**
      * Stop runnable entry.
      */
-    public static final DiagramQueueEntry STOP_RUNNABLE_ENTRY = new DiagramQueueEntry(null, null);
+    public static final DiagramQueueEntry STOP_RUNNABLE_ENTRY = new DiagramQueueEntry(null, null, null, null, null);
 
     /**
      * Entries to be processed by this thread.

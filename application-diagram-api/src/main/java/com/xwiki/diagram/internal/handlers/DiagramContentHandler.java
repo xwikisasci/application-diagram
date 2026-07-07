@@ -21,6 +21,7 @@ package com.xwiki.diagram.internal.handlers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,6 +67,8 @@ public class DiagramContentHandler
      * Reference to Diagram's class.
      */
     public static final LocalDocumentReference DIAGRAM_CLASS = new LocalDocumentReference("Diagram", "DiagramClass");
+
+    private static final String UPDATED_DIAGRAM_AFTER_PAGE_RENAME = "Updated diagram after page rename";
 
     @Inject
     private Provider<GetDiagramLinksHandler> getDiagramLinksHandlerProvider;
@@ -117,7 +120,7 @@ public class DiagramContentHandler
         XWikiDocument oldDoc = context.getWiki().getDocument(oldDocRef, context);
         XWikiDocument newDoc = context.getWiki().getDocument(newDocRef, context);
 
-        String attachmentContent = IOUtils.toString(attachment.getContentInputStream(context), "UTF-8");
+        String attachmentContent = IOUtils.toString(attachment.getContentInputStream(context), StandardCharsets.UTF_8);
 
         String regex = "\"%s\"";
         String oldAbsoluteURL = String.format(regex, oldDoc.getExternalURL(VIEW_ACTION, context));
@@ -150,7 +153,83 @@ public class DiagramContentHandler
     {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
             .parse(new ByteArrayInputStream(backlinkDoc.getContent().getBytes()));
+        boolean updated = maybeUpdateContent(document, originalDocRef, currentDocRef);
+        // Since a document save is expensive we actually do the save only when are sure that a node was updated.
+        if (updated) {
+            logger.info("Updating the diagram content because a backlink document has been updated. Original "
+                + "Reference: [{}] New Reference: [{}]",  originalDocRef, currentDocRef);
+            backlinkDoc.setContent(XMLUtils.serialize(document));
+            context.getWiki().saveDocument(backlinkDoc, UPDATED_DIAGRAM_AFTER_PAGE_RENAME, context);
+        }
+    }
 
+    /**
+     * Update content of the diagram with new links.
+     *
+     * @param diagramAttachments list of diagram attachments
+     * @param backlinkDoc document that has a backlink to the diagram
+     * @param originalDocRef reference of the document before rename
+     * @param currentDocRef reference of the document after rename
+     * @param context context of the execution
+     * @throws ParserConfigurationException if a DocumentBuilder cannot be created
+     * @throws SAXException if parsing the document fails
+     * @throws IOException if any IO errors occur
+     * @throws XWikiException if saving the document fails
+     */
+    public void updateDiagramContent(List<XWikiAttachment> diagramAttachments, XWikiDocument backlinkDoc,
+        DocumentReference originalDocRef, DocumentReference currentDocRef, XWikiContext context)
+        throws ParserConfigurationException, XWikiException, IOException, SAXException
+    {
+        boolean updated = false;
+        for (XWikiAttachment attachment : diagramAttachments) {
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(attachment.getContentInputStream(context));
+
+            updated |= maybeUpdateContent(document, originalDocRef, currentDocRef);
+
+            if (updated) {
+                logger.info("Found an inline diagram that should be updated. Digram name: [{}] Document containing the"
+                        + " diagram [{}] Original Reference [{}] New Reference [{}]", attachment.getFilename(),
+                    backlinkDoc.getDocumentReference(), originalDocRef, currentDocRef);
+                attachment.setContent(
+                    new ByteArrayInputStream(XMLUtils.serialize(document).getBytes(StandardCharsets.UTF_8)));
+                attachment.setAuthorReference(context.getAuthorReference());
+            }
+        }
+        if (updated) {
+            logger.info("Updating the diagram content because a backlink document has been updated. Document containing"
+                + "the diagram [{}] Original Reference [{}] New Reference [{}]", backlinkDoc.getDocumentReference(),
+                originalDocRef, currentDocRef);
+            context.getWiki().saveDocument(backlinkDoc, UPDATED_DIAGRAM_AFTER_PAGE_RENAME, context);
+        }
+    }
+
+    /**
+     * Search referenced pages inside the content of a diagram.
+     *
+     * @param content the content of the diagram
+     * @param diagramReference the reference of current diagram
+     * @return linkedPages list of pages linked in this content
+     */
+    public List<EntityReference> getLinkedPages(String content, DocumentReference diagramReference)
+    {
+        try {
+            GetDiagramLinksHandler getDiagramLinksHandler = getDiagramLinksHandlerProvider.get();
+            SAXParserFactory.newInstance().newSAXParser()
+                .parse(new ByteArrayInputStream(content.getBytes()), getDiagramLinksHandler);
+
+            return getDiagramLinksHandler.getLinkedPages(diagramReference);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            logger.warn("Failed while getting diagram linked pages", e);
+        }
+
+        return Collections.emptyList();
+    }
+
+
+    private boolean maybeUpdateContent(Document document, DocumentReference originalDocRef,
+        DocumentReference currentDocRef) throws IOException, ParserConfigurationException, SAXException
+    {
         boolean updated = false;
         NodeList userObjectList = document.getElementsByTagName("UserObject");
         for (int i = 0; i < userObjectList.getLength(); i++) {
@@ -161,33 +240,6 @@ public class DiagramContentHandler
         for (int i = 0; i < mxCellList.getLength(); i++) {
             updated |= linkHandler.updateMxCellNode(mxCellList.item(i), currentDocRef, originalDocRef);
         }
-
-        // Since a document save is expensive we actually do the save only when are sure that a node was updated.
-        if (updated) {
-            backlinkDoc.setContent(XMLUtils.serialize(document));
-            context.getWiki().saveDocument(backlinkDoc, "Updated diagram after page rename", context);
-        }
-    }
-
-    /**
-     * Search referenced pages inside the content of a diagram.
-     * 
-     * @param content the content of the diagram
-     * @param diagramReference the reference of current diagram
-     * @return linkedPages list of pages linked in this content
-     */
-    public List<EntityReference> getLinkedPages(String content, DocumentReference diagramReference)
-    {
-        try {
-            GetDiagramLinksHandler getDiagramLinksHandler = getDiagramLinksHandlerProvider.get();
-            SAXParserFactory.newInstance().newSAXParser().parse(new ByteArrayInputStream(content.getBytes()),
-                getDiagramLinksHandler);
-
-            return getDiagramLinksHandler.getLinkedPages(diagramReference);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            logger.warn("Failed while getting diagram linked pages", e);
-        }
-
-        return Collections.emptyList();
+        return updated;
     }
 }

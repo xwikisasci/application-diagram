@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,11 @@ public class DiagramIT
     private final DocumentReference diagramReference1 = new DocumentReference("xwiki", "Main", "DiagramTest");
 
     private final DocumentReference diagramReference2 = new DocumentReference("xwiki", "Main", "DiagramTestRenamed");
+
+    @BeforeAll
+    void setup(TestUtils testUtils) {
+        testUtils.createAdminUser();
+    }
 
     @BeforeEach
     void beforeEach(TestUtils testUtils)

@@ -17,31 +17,38 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package com.xwiki.diagram.test.ui;
+package com.xwiki.diagram.test.po;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.xwiki.test.docker.junit5.UITest;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.xwiki.test.ui.po.ViewPage;
 
-/**
- * All UI tests for the Diagram Macro.
- *
- * @version $Id$
- * @since 1.22.8
- */
-@UITest
-public class AllIT
+public class BackreferenceViewPage extends ViewPage
 {
-    @Nested
-    @DisplayName("Diagram Tests")
-    class NestedConfluenceMigratorIT extends DiagramIT
+    public BackreferenceViewPage()
     {
+
     }
 
-    @Nested
-    @DisplayName("Diagram backlinks")
-    class NestedBacklinksIT extends BacklinksIT
+    public static BackreferenceViewPage getInstance()
     {
+        return new BackreferenceViewPage();
+    }
+
+    public boolean containsPageReferences(List<String> diagramReferences)
+    {
+        List<WebElement> elements = getDriver().findElements(By.cssSelector(".backReference-test"));
+        Set<String> references = elements.stream().map(WebElement::getText).collect(Collectors.toSet());
+
+        boolean contains = true;
+        for (String diagramReference : diagramReferences){
+            contains = contains && references.contains(diagramReference);
+        }
+
+        return contains;
     }
 }
