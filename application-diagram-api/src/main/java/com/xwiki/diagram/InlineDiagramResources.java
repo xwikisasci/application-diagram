@@ -36,7 +36,7 @@ import org.xwiki.stability.Unstable;
  * Provides the APIs needed by the Inline Diagram Macro.
  *
  * @version $Id$
- * @since 1.22.11
+ * @since 2.0
  */
 @Unstable
 @Path("/diagram/inline")

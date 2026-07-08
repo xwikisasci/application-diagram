@@ -36,7 +36,7 @@ import org.xwiki.stability.Unstable;
  * actions and updates the diagrams create by the Inline Diagram Macro.
  *
  * @version $Id$
- * @since 1.22.11
+ * @since 2.0
  */
 @Component
 @Named("inlineDiagram")

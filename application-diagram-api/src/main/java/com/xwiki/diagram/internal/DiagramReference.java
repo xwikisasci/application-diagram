@@ -23,7 +23,7 @@ package com.xwiki.diagram.internal;
  * Diagram picker.
  *
  * @version $Id$
- * @since 1.22.11
+ * @since 2.0
  */
 public class DiagramReference
 {

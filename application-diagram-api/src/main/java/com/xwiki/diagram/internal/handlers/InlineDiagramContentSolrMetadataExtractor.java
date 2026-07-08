@@ -45,7 +45,7 @@ import static com.xwiki.diagram.internal.AttachmentUtils.getContentAsString;
  * <p>
  *
  * @version $Id$
- * @since 1.22.11
+ * @since 2.0
  */
 @Component
 @Named("macroinlinediagram")

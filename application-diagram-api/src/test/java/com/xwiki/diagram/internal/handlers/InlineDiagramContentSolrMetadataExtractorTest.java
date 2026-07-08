@@ -56,7 +56,7 @@ import static org.mockito.Mockito.when;
  * Unit for {@link InlineDiagramContentSolrMetadataExtractor}
  *
  * @version $Id$
- * @since 1.22.11
+ * @since 2.0
  */
 @ComponentTest
 public class InlineDiagramContentSolrMetadataExtractorTest

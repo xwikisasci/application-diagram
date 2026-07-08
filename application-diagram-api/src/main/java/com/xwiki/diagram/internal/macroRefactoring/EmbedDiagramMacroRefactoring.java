@@ -40,7 +40,7 @@ import org.xwiki.stability.Unstable;
  * Handles the update of the embedded diagram reference when the source is moved.
  *
  * @version $Id$
- * @since 1.22.11
+ * @since 2.0
  */
 @Component
 @Named("embedDiagram")
