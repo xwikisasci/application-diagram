@@ -37,6 +37,9 @@ import org.xwiki.test.ui.po.InlinePage;
 import org.xwiki.test.ui.po.RenamePage;
 import org.xwiki.test.ui.po.ViewPage;
 import org.xwiki.test.ui.po.editor.ObjectEditPage;
+import org.xwiki.user.test.po.PreferencesEditPage;
+import org.xwiki.user.test.po.PreferencesUserProfilePage;
+import org.xwiki.user.test.po.ProfileUserProfilePage;
 
 import com.xwiki.diagram.test.po.DiagramMacro;
 import com.xwiki.diagram.test.po.DiagramMacroPage;
@@ -59,7 +62,22 @@ public class DiagramIT
 
     @BeforeAll
     void setup(TestUtils testUtils) {
+        // We make sure that the admin account is created and we are logged in as it.
         testUtils.createAdminUser();
+        // We log as the admin because the superadmin doesn't have all the rights, and we want to make the admin an
+        // advanced user
+        testUtils.loginAsSuperAdmin();
+        testUtils.setGlobalRights("XWiki.XWikiAdminGroup", "", "admin", true);
+
+        // Make the user advanced
+        ProfileUserProfilePage userProfilePage = ProfileUserProfilePage.gotoPage("Admin");
+        PreferencesUserProfilePage preferencesPage = userProfilePage.switchToPreferences();
+        PreferencesEditPage preferencesEditPage = preferencesPage.editPreferences();
+        preferencesEditPage.setAdvancedUserType();
+        preferencesEditPage.clickSaveAndView();
+
+        // Log bag as the admin and start the creation of the tree.
+        testUtils.loginAsAdmin();
     }
 
     @BeforeEach
