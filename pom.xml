@@ -29,7 +29,7 @@
   </parent>
   <groupId>com.xwiki.diagram</groupId>
   <artifactId>application-diagram-parent</artifactId>
-  <version>2.0</version>
+  <version>2.0.1-SNAPSHOT</version>
   <name>Diagram Application (Pro) - Parent POM</name>
   <packaging>pom</packaging>
   <description>Create easy to use diagrams and flowcharts using draw.io. Import Gliffy diagrams. Include diagrams in other pages. Export them as PDFs or images. The app can be purchased individually or part of the XWiki Pro package. Try it free.</description>
@@ -41,7 +41,7 @@
     <connection>scm:git:https://github.com/xwikisas/application-diagram.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/xwikisas/application-diagram.git</developerConnection>
     <url>https://github.com/xwikisas/application-diagram</url>
-    <tag>application-diagram-parent-2.0</tag>
+    <tag>HEAD</tag>
   </scm>
   <build>
     <extensions>
