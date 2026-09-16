@@ -121,9 +121,6 @@ diagram.editor.menu.notification.error=Something went wrong while trying to save
 # Link modal
 diagram.link.modal.link=Link
 
-# Link modal
-diagram.link.modal.link=Link
-
 # Diagram Configuration
 Diagram.DiagramConfigClass_exportURL=Export URL
 Diagram.DiagramConfigClass_exportURL_hint=The URL used to export the diagrams as image in IE11, or as PDF when performed from the diagram editor. Note that the diagram content, with all the private information that it may contain, will be send to the Export URL when this is used.

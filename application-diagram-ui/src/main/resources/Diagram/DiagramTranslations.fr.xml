@@ -122,9 +122,6 @@ diagram.editor.menu.notification.error=Quelque chose s'est mal passé lors de la
 # Link modal
 diagram.link.modal.link=Lien
 
-# Link modal
-diagram.link.modal.link=Lien
-
 # Diagram Configuration
 Diagram.DiagramConfigClass_exportURL=URL d'export
 Diagram.DiagramConfigClass_exportURL_hint=L'URL utilisée pur exporter les diagrammes comme images dans IE11, ou en PDF quand réalisé depuis l'éditeur de diagramme. Notez que le contenu du diagramme, avec tous les informations privées qu'il pourrait contenir, seront envoyés à l'URL d'export lorsque ceci est utilisé.
